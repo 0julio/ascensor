@@ -123,6 +123,13 @@
     border-radius: 5px 0 0 5px;
     transition: width 0.25s ease;
   }
+  .row .count {
+    width: 22px;
+    font-family: "SF Mono", ui-monospace, Menlo, monospace;
+    font-size: 12px;
+    color: var(--text-lo);
+    text-align: right;
+  }
   .row .pct {
     width: 42px;
     font-family: "SF Mono", ui-monospace, Menlo, monospace;
@@ -209,6 +216,7 @@
       row.innerHTML =
         '<span class="fnum">' + fmt(f) + '</span>' +
         '<span class="bar-track"><span class="bar-fill" style="width:' + pct.toFixed(0) + '%"></span></span>' +
+        '<span class="count">' + counts[f] + '</span>' +
         '<span class="pct">' + (total > 0 ? Math.round(pct) + "%" : "—") + '</span>';
       statsList.appendChild(row);
     });
