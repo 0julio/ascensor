@@ -138,6 +138,11 @@
     text-align: right;
   }
 
+  .total-row {
+    width: 100%;
+    max-width: 360px;
+    text-align: center;
+  }
   .footer {
     width: 100%;
     max-width: 360px;
@@ -160,6 +165,10 @@
     padding: 6px;
   }
   .reset-btn.confirm { color: var(--amber); }
+  .reset-btn:disabled {
+    color: var(--steel-light);
+    text-decoration: none;
+  }
 
   .hint {
     font-size: 11px;
@@ -183,8 +192,12 @@
   <div id="stats-list"></div>
 </div>
 
-<div class="footer">
+<div class="total-row">
   <span class="total" id="total-count">0 registros</span>
+</div>
+
+<div class="footer">
+  <button class="reset-btn" id="undo-btn" disabled>Deshacer último toque</button>
   <button class="reset-btn" id="reset-btn">Reiniciar datos</button>
 </div>
 
@@ -237,12 +250,21 @@
     });
   }
 
+  var lastPressed = null;
+
   function press(f, btn) {
     counts[f] = (counts[f] || 0) + 1;
+    lastPressed = f;
+    updateUndoButton();
     render();
     btn.classList.add("pressed");
     setTimeout(function () { btn.classList.remove("pressed"); }, 160);
     save();
+  }
+
+  function updateUndoButton() {
+    var undoBtn = document.getElementById("undo-btn");
+    undoBtn.disabled = (lastPressed === null);
   }
 
   function save() {
@@ -268,6 +290,15 @@
     render();
   }
 
+  document.getElementById("undo-btn").addEventListener("click", function () {
+    if (lastPressed === null) return;
+    if (counts[lastPressed] > 0) counts[lastPressed]--;
+    lastPressed = null;
+    updateUndoButton();
+    render();
+    save();
+  });
+
   var resetPending = false;
   var resetBtn = document.getElementById("reset-btn");
   resetBtn.addEventListener("click", function () {
@@ -283,6 +314,8 @@
       return;
     }
     FLOORS.forEach(function (f) { counts[f] = 0; });
+    lastPressed = null;
+    updateUndoButton();
     render();
     save();
     resetPending = false;
