@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Panel del ascensor</title>
+<style>
+  :root {
+    --steel-dark: #202226;
+    --steel: #2c2f34;
+    --steel-light: #3b3e44;
+    --brushed: #babec4;
+    --brushed-dark: #8b8f95;
+    --amber: #ffab2e;
+    --amber-dim: #7a5220;
+    --text-hi: #eef0f2;
+    --text-lo: #9a9ea5;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--steel-dark);
+    color: var(--text-hi);
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    min-height: 100vh;
+    overscroll-behavior: none;
+  }
+  body {
+    padding: max(24px, env(safe-area-inset-top)) 18px max(30px, env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+  }
+  h1 {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-lo);
+    margin: 0;
+  }
+
+  .bestguess {
+    width: 100%;
+    max-width: 360px;
+    background: var(--steel);
+    border: 1px solid var(--steel-light);
+    border-radius: 14px;
+    padding: 14px 18px;
+    text-align: center;
+  }
+  .bestguess .label {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-lo);
+  }
+  .bestguess .value {
+    font-family: "SF Mono", ui-monospace, Menlo, monospace;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--amber);
+    margin-top: 4px;
+    letter-spacing: 0.03em;
+  }
+  .bestguess .sub {
+    font-size: 12px;
+    color: var(--text-lo);
+    margin-top: 2px;
+  }
+
+  .panel {
+    width: 100%;
+    max-width: 360px;
+    background: linear-gradient(180deg, var(--steel-light), var(--steel));
+    border: 1px solid #45484d;
+    border-radius: 18px;
+    padding: 16px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  button.floor {
+    appearance: none;
+    border: none;
+    border-radius: 12px;
+    background: var(--brushed);
+    background-image: linear-gradient(180deg, #d3d6da, #a9adb3);
+    color: #24262a;
+    font-family: "SF Mono", ui-monospace, Menlo, monospace;
+    font-size: 22px;
+    font-weight: 700;
+    padding: 16px 0;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -2px 3px rgba(0,0,0,0.25);
+    transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.12s ease;
+  }
+  button.floor:active,
+  button.floor.pressed {
+    transform: scale(0.94);
+    background: var(--amber);
+    background-image: none;
+    color: #3a2400;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.35), 0 0 14px 2px rgba(255,171,46,0.55);
+  }
+
+  .stats {
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .stats-title {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-lo);
+    margin: 4px 2px 2px;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 2px;
+  }
+  .row .fnum {
+    width: 26px;
+    font-family: "SF Mono", ui-monospace, Menlo, monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-hi);
+    text-align: right;
+  }
+  .row .bar-track {
+    display: block;
+    flex: 1;
+    min-width: 0;
+    height: 10px;
+    background: var(--steel);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .row .bar-fill {
+    display: block;
+    height: 100%;
+    background: var(--amber);
+    border-radius: 5px 0 0 5px;
+    transition: width 0.25s ease;
+  }
+  .row .pct {
+    width: 42px;
+    font-family: "SF Mono", ui-monospace, Menlo, monospace;
+    font-size: 12px;
+    color: var(--text-lo);
+    text-align: right;
+  }
+
+  .footer {
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+  }
+  .total {
+    font-size: 12px;
+    color: var(--text-lo);
+  }
+  .reset-btn {
+    appearance: none;
+    border: none;
+    background: none;
+    color: var(--text-lo);
+    font-size: 12px;
+    text-decoration: underline;
+    padding: 6px;
+  }
+  .reset-btn.confirm { color: var(--amber); }
+
+  .hint {
+    font-size: 11px;
+    color: var(--text-lo);
+    text-align: center;
+    max-width: 320px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<h1>Panel del ascensor</h1>
+
+<div class="bestguess">
+  <div class="label">Antes de llamarlo, marca dónde está</div>
+  <div class="value" id="best-value">—</div>
+  <div class="sub" id="best-sub">Registra tu primera planta</div>
+</div>
+
+<div class="panel">
+  <div class="grid" id="button-grid"></div>
+</div>
+
+<div class="stats">
+  <div class="stats-title">Probabilidad por planta</div>
+  <div id="stats-list"></div>
+</div>
+
+<div class="footer">
+  <span class="total" id="total-count">0 registros</span>
+  <button class="reset-btn" id="reset-btn">Reiniciar datos</button>
+</div>
+
+<div class="hint">Cada vez que llegues, pulsa la planta en la que ves el ascensor. Los datos se guardan en este dispositivo.</div>
+
+<script>
+(function () {
+  var FLOORS = [6, 5, 4, 3, 2, 1, 0, -1, -2, -3];
+  var STORAGE_KEY = "panel-ascensor:counts";
+  var counts = {};
+  FLOORS.forEach(function (f) { counts[f] = 0; });
+
+  function fmt(n) { return (n > 0 ? "P" : "") + n; }
+  function label(n) {
+    if (n === 0) return "Baja";
+    if (n < 0) return "Sótano " + Math.abs(n);
+    return "Planta " + n;
+  }
+
+  function render() {
+    var total = FLOORS.reduce(function (s, f) { return s + counts[f]; }, 0);
+
+    var bestFloor = null, bestCount = -1;
+    FLOORS.forEach(function (f) {
+      if (counts[f] > bestCount) { bestCount = counts[f]; bestFloor = f; }
+    });
+
+    var bestValueEl = document.getElementById("best-value");
+    var bestSubEl = document.getElementById("best-sub");
+    if (total === 0) {
+      bestValueEl.textContent = "—";
+      bestSubEl.textContent = "Registra tu primera planta";
+    } else {
+      var pct = Math.round((bestCount / total) * 100);
+      bestValueEl.textContent = label(bestFloor);
+      bestSubEl.textContent = pct + "% de las veces (" + bestCount + " de " + total + ")";
+    }
+
+    var statsList = document.getElementById("stats-list");
+    statsList.innerHTML = "";
+    FLOORS.forEach(function (f) {
+      var pct = total > 0 ? (counts[f] / total) * 100 : 0;
+      var row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML =
+        '<span class="fnum">' + fmt(f) + '</span>' +
+        '<span class="bar-track"><span class="bar-fill" style="width:' + pct.toFixed(0) + '%"></span></span>' +
+        '<span class="pct">' + (total > 0 ? Math.round(pct) + "%" : "—") + '</span>';
+      statsList.appendChild(row);
+    });
+
+    document.getElementById("total-count").textContent =
+      total + (total === 1 ? " registro" : " registros");
+  }
+
+  function buildButtons() {
+    var grid = document.getElementById("button-grid");
+    FLOORS.forEach(function (f) {
+      var btn = document.createElement("button");
+      btn.className = "floor";
+      btn.textContent = fmt(f);
+      btn.setAttribute("aria-label", label(f));
+      btn.addEventListener("click", function () { press(f, btn); });
+      grid.appendChild(btn);
+    });
+  }
+
+  function press(f, btn) {
+    counts[f] = (counts[f] || 0) + 1;
+    render();
+    btn.classList.add("pressed");
+    setTimeout(function () { btn.classList.remove("pressed"); }, 160);
+    save();
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(counts));
+    } catch (err) {
+      console.error("No se pudo guardar:", err);
+    }
+  }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var saved = JSON.parse(raw);
+        FLOORS.forEach(function (f) {
+          if (typeof saved[f] === "number") counts[f] = saved[f];
+        });
+      }
+    } catch (err) {
+      // no hay datos guardados todavia, se queda en 0
+    }
+    render();
+  }
+
+  var resetPending = false;
+  var resetBtn = document.getElementById("reset-btn");
+  resetBtn.addEventListener("click", function () {
+    if (!resetPending) {
+      resetPending = true;
+      resetBtn.textContent = "¿Seguro? toca otra vez";
+      resetBtn.classList.add("confirm");
+      setTimeout(function () {
+        resetPending = false;
+        resetBtn.textContent = "Reiniciar datos";
+        resetBtn.classList.remove("confirm");
+      }, 3000);
+      return;
+    }
+    FLOORS.forEach(function (f) { counts[f] = 0; });
+    render();
+    save();
+    resetPending = false;
+    resetBtn.textContent = "Reiniciar datos";
+    resetBtn.classList.remove("confirm");
+  });
+
+  buildButtons();
+  load();
+})();
+</script>
+
+</body>
+</html>
