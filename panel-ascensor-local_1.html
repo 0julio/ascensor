@@ -43,35 +43,6 @@
     margin: 0;
   }
 
-  .bestguess {
-    width: 100%;
-    max-width: 360px;
-    background: var(--steel);
-    border: 1px solid var(--steel-light);
-    border-radius: 14px;
-    padding: 14px 18px;
-    text-align: center;
-  }
-  .bestguess .label {
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-lo);
-  }
-  .bestguess .value {
-    font-family: "SF Mono", ui-monospace, Menlo, monospace;
-    font-size: 30px;
-    font-weight: 700;
-    color: var(--amber);
-    margin-top: 4px;
-    letter-spacing: 0.03em;
-  }
-  .bestguess .sub {
-    font-size: 12px;
-    color: var(--text-lo);
-    margin-top: 2px;
-  }
-
   .panel {
     width: 100%;
     max-width: 360px;
@@ -196,12 +167,6 @@
 
 <h1>Panel del ascensor</h1>
 
-<div class="bestguess">
-  <div class="label">Antes de llamarlo, marca dónde está</div>
-  <div class="value" id="best-value">—</div>
-  <div class="sub" id="best-sub">Registra tu primera planta</div>
-</div>
-
 <div class="panel">
   <div class="grid" id="button-grid"></div>
 </div>
@@ -234,22 +199,6 @@
 
   function render() {
     var total = FLOORS.reduce(function (s, f) { return s + counts[f]; }, 0);
-
-    var bestFloor = null, bestCount = -1;
-    FLOORS.forEach(function (f) {
-      if (counts[f] > bestCount) { bestCount = counts[f]; bestFloor = f; }
-    });
-
-    var bestValueEl = document.getElementById("best-value");
-    var bestSubEl = document.getElementById("best-sub");
-    if (total === 0) {
-      bestValueEl.textContent = "—";
-      bestSubEl.textContent = "Registra tu primera planta";
-    } else {
-      var pct = Math.round((bestCount / total) * 100);
-      bestValueEl.textContent = label(bestFloor);
-      bestSubEl.textContent = pct + "% de las veces (" + bestCount + " de " + total + ")";
-    }
 
     var statsList = document.getElementById("stats-list");
     statsList.innerHTML = "";
