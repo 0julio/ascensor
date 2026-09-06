@@ -372,6 +372,16 @@
       <h2>Tu banco (<span id="word-count">0</span>)</h2>
       <ul class="word-list" id="word-list"></ul>
     </div>
+
+    <div class="card">
+      <h2>Importar / exportar</h2>
+      <p class="setup-label">Guarda una copia de tus palabras o carga una lista desde otro archivo.</p>
+      <div class="row">
+        <button class="btn-add" id="btn-export" style="flex:1;">Exportar palabras</button>
+        <button class="btn-add" id="btn-import" style="flex:1; background:var(--surface-2); color:var(--text);">Importar palabras</button>
+      </div>
+      <input type="file" id="input-import-file" accept=".json,application/json" style="display:none;">
+    </div>
   </div>
 
   <div class="tab-content" id="tab-practicar">
@@ -542,6 +552,56 @@
       tabBtns.forEach(b => b.classList.toggle('active', b === btn));
       tabContents.forEach(c => c.classList.toggle('active', c.id === 'tab-' + btn.dataset.tab));
     });
+  });
+
+  const btnExport = document.getElementById('btn-export');
+  const btnImport = document.getElementById('btn-import');
+  const inputImportFile = document.getElementById('input-import-file');
+
+  btnExport.addEventListener('click', () => {
+    const data = JSON.stringify(words, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'vocabulario-palabras.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  btnImport.addEventListener('click', () => inputImportFile.click());
+
+  inputImportFile.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const parsed = JSON.parse(ev.target.result);
+        if(!Array.isArray(parsed)) throw new Error('formato inválido');
+
+        let added = 0;
+        parsed.forEach(item => {
+          if(item && typeof item.en === 'string' && typeof item.es === 'string' && item.en.trim() && item.es.trim()){
+            words.push({ en: item.en.trim(), es: item.es.trim() });
+            added++;
+          }
+        });
+
+        saveWords();
+        renderWordList();
+        alert(added > 0
+          ? `Se importaron ${added} palabra${added === 1 ? '' : 's'}.`
+          : 'El archivo no tenía palabras válidas.');
+      } catch(err){
+        alert('No se pudo leer el archivo. Asegúrate de que sea un JSON exportado desde esta app.');
+      }
+      inputImportFile.value = '';
+    };
+    reader.readAsText(file);
   });
 
   function selectQty(value){
