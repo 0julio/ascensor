@@ -2,332 +2,729 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMyMDIyMjYiLz4KICA8cmVjdCB4PSIxNCIgeT0iMTYiIHdpZHRoPSIxNiIgaGVpZ2h0PSIzNCIgcng9IjMiIGZpbGw9IiNiYWJlYzQiLz4KICA8cmVjdCB4PSIzNCIgeT0iMTYiIHdpZHRoPSIxNiIgaGVpZ2h0PSIzNCIgcng9IjMiIGZpbGw9IiNiYWJlYzQiLz4KICA8cmVjdCB4PSIzMCIgeT0iMTYiIHdpZHRoPSI0IiBoZWlnaHQ9IjM0IiBmaWxsPSIjMjAyMjI2Ii8+CiAgPGNpcmNsZSBjeD0iMzIiIGN5PSIxMCIgcj0iNCIgZmlsbD0iI2ZmYWIyZSIvPgo8L3N2Zz4K">
-<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMyMDIyMjYiLz4KICA8cmVjdCB4PSIxNCIgeT0iMTYiIHdpZHRoPSIxNiIgaGVpZ2h0PSIzNCIgcng9IjMiIGZpbGw9IiNiYWJlYzQiLz4KICA8cmVjdCB4PSIzNCIgeT0iMTYiIHdpZHRoPSIxNiIgaGVpZ2h0PSIzNCIgcng9IjMiIGZpbGw9IiNiYWJlYzQiLz4KICA8cmVjdCB4PSIzMCIgeT0iMTYiIHdpZHRoPSI0IiBoZWlnaHQ9IjM0IiBmaWxsPSIjMjAyMjI2Ii8+CiAgPGNpcmNsZSBjeD0iMzIiIGN5PSIxMCIgcj0iNCIgZmlsbD0iI2ZmYWIyZSIvPgo8L3N2Zz4K">
-<title>Panel del ascensor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocabulario</title>
 <style>
-  :root {
-    --steel-dark: #202226;
-    --steel: #2c2f34;
-    --steel-light: #3b3e44;
-    --brushed: #babec4;
-    --brushed-dark: #8b8f95;
-    --amber: #ffab2e;
-    --amber-dim: #7a5220;
-    --text-hi: #eef0f2;
-    --text-lo: #9a9ea5;
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --bg: #12141a;
+    --surface: #1b1e26;
+    --surface-2: #242833;
+    --border: #2c303b;
+    --text: #eef0f4;
+    --text-dim: #9aa1b2;
+    --gold: #e0b15c;
+    --gold-dim: #4a3d24;
+    --red: #e2645f;
+    --red-dim: #3d2323;
   }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body {
-    margin: 0; padding: 0;
-    background: var(--steel-dark);
-    color: var(--text-hi);
-    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-    min-height: 100vh;
-    overscroll-behavior: none;
-  }
-  body {
-    padding: max(24px, env(safe-area-inset-top)) 18px max(30px, env(safe-area-inset-bottom));
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 22px;
-  }
-  h1 {
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-lo);
+
+  *{ box-sizing: border-box; }
+
+  body{
     margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 32px 16px 80px;
   }
 
-  .panel {
+  main{
     width: 100%;
-    max-width: 360px;
-    background: linear-gradient(180deg, var(--steel-light), var(--steel));
-    border: 1px solid #45484d;
-    border-radius: 18px;
-    padding: 16px;
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  button.floor {
-    appearance: none;
-    border: none;
-    border-radius: 12px;
-    background: var(--brushed);
-    background-image: linear-gradient(180deg, #d3d6da, #a9adb3);
-    color: #24262a;
-    font-family: "SF Mono", ui-monospace, Menlo, monospace;
-    font-size: 22px;
-    font-weight: 700;
-    padding: 16px 0;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -2px 3px rgba(0,0,0,0.25);
-    transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.12s ease;
-  }
-  button.floor:active,
-  button.floor.pressed {
-    transform: scale(0.94);
-    background: var(--amber);
-    background-image: none;
-    color: #3a2400;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.35), 0 0 14px 2px rgba(255,171,46,0.55);
+    max-width: 480px;
   }
 
-  .stats {
-    width: 100%;
-    max-width: 360px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  h1{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 2.1rem;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
   }
-  .stats-title {
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-lo);
-    margin: 4px 2px 2px;
+
+  .sub{
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin: 0 0 28px;
+    line-height: 1.5;
   }
-  .row {
+
+  .card{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 18px;
+  }
+
+  .card h2{
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 0 0 14px;
+  }
+
+  .row{
     display: flex;
-    align-items: center;
     gap: 10px;
-    padding: 5px 2px;
+    margin-bottom: 10px;
   }
-  .row .fnum {
-    width: 26px;
-    font-family: "SF Mono", ui-monospace, Menlo, monospace;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text-hi);
-    text-align: right;
-  }
-  .row .bar-track {
-    display: block;
+
+  input[type="text"]{
     flex: 1;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 11px 13px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
     min-width: 0;
-    height: 10px;
-    background: var(--steel);
-    border-radius: 5px;
-    overflow: hidden;
-  }
-  .row .bar-fill {
-    display: block;
-    height: 100%;
-    background: var(--amber);
-    border-radius: 5px 0 0 5px;
-    transition: width 0.25s ease;
-  }
-  .row .count {
-    width: 22px;
-    font-family: "SF Mono", ui-monospace, Menlo, monospace;
-    font-size: 12px;
-    color: var(--text-lo);
-    text-align: right;
-  }
-  .row .pct {
-    width: 42px;
-    font-family: "SF Mono", ui-monospace, Menlo, monospace;
-    font-size: 12px;
-    color: var(--text-lo);
-    text-align: right;
   }
 
-  .total-row {
-    width: 100%;
-    max-width: 360px;
-    text-align: center;
+  input[type="text"]::placeholder{ color: #656c7c; }
+
+  input[type="text"]:focus{
+    outline: none;
+    border-color: var(--gold);
   }
-  .footer {
+
+  button{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: transform 0.08s ease, opacity 0.15s ease;
+  }
+
+  button:active{ transform: scale(0.97); }
+
+  .btn-add{
+    background: var(--gold);
+    color: #201705;
+    padding: 11px 18px;
+    white-space: nowrap;
+  }
+
+  .btn-add:hover{ opacity: 0.9; }
+
+  .btn-start{
     width: 100%;
-    max-width: 360px;
+    background: var(--gold);
+    color: #201705;
+    padding: 16px;
+    font-size: 1.05rem;
+    border-radius: 11px;
+  }
+
+  .btn-start:disabled{
+    background: var(--surface-2);
+    color: var(--text-dim);
+    cursor: not-allowed;
+  }
+
+  .word-list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
+  .word-list li{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 4px;
-  }
-  .total {
-    font-size: 12px;
-    color: var(--text-lo);
-  }
-  .reset-btn {
-    appearance: none;
-    border: none;
-    background: none;
-    color: var(--text-lo);
-    font-size: 12px;
-    text-decoration: underline;
-    padding: 6px;
-  }
-  .reset-btn.confirm { color: var(--amber); }
-  .reset-btn:disabled {
-    color: var(--steel-light);
-    text-decoration: none;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.92rem;
   }
 
-  .hint {
-    font-size: 11px;
-    color: var(--text-lo);
-    text-align: center;
-    max-width: 320px;
-    line-height: 1.5;
+  .word-list li:last-child{ border-bottom: none; }
+
+  .word-list .pair{ color: var(--text); }
+  .word-list .pair span{ color: var(--text-dim); }
+
+  .del-btn{
+    background: none;
+    color: #656c7c;
+    font-size: 1.1rem;
+    padding: 2px 8px;
+    line-height: 1;
   }
+  .del-btn:hover{ color: var(--red); }
+
+  .empty{
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    padding: 6px 0;
+  }
+
+  .stats{
+    display: flex;
+    gap: 16px;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+
+  .stats b{ color: var(--text); font-family: 'Fraunces', serif; font-size: 1.1rem; }
+  .stats .ok b{ color: var(--gold); }
+  .stats .bad b{ color: var(--red); }
+  .stats #stat-total-wrap{ color: var(--text-dim); }
+  .stats #stat-total-wrap b{ color: var(--text-dim); font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.9rem; }
+
+  .quiz-prompt{
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+  }
+
+  .quiz-word{
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 2rem;
+    text-align: center;
+    margin: 4px 0 22px;
+  }
+
+  .options{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option{
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 13px 16px;
+    border-radius: 10px;
+    text-align: left;
+    font-size: 0.98rem;
+  }
+
+  .option:hover:not(:disabled){ border-color: var(--gold); }
+
+  .option.correct{
+    background: var(--gold-dim);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .option.wrong{
+    background: var(--red-dim);
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  .option:disabled{ cursor: default; }
+
+  .next-wrap{
+    margin-top: 16px;
+    display: none;
+  }
+
+  .btn-next{
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px;
+  }
+
+  .btn-next:hover{ border-color: var(--gold); }
+
+  .hidden{ display: none; }
+
+  body.quiz-mode .hide-on-quiz{ display: none; }
+
+  .btn-exit{
+    background: none;
+    color: var(--text-dim);
+    padding: 8px 0;
+    font-size: 0.85rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .btn-exit:hover{ color: var(--text); }
+
+  .setup-label{
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    margin: 0 0 10px;
+  }
+
+  .qty-options{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .qty-pill{
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .qty-pill:hover{ border-color: var(--gold); }
+
+  .qty-pill.selected{
+    background: var(--gold-dim);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .progress{
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+  }
+
+  .summary{
+    text-align: center;
+    padding: 10px 0 4px;
+  }
+
+  .summary .big{
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 2.4rem;
+    margin: 6px 0 2px;
+  }
+
+  .summary .big .ok-num{ color: var(--gold); }
+  .summary .big .bad-num{ color: var(--red); }
+
+  .summary p{
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    margin: 0 0 22px;
+  }
+
+  .summary .btn-add{ width: 100%; margin-bottom: 10px; }
+
+  .tabs{
+    display: flex;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 5px;
+    margin-bottom: 18px;
+  }
+
+  .tab-btn{
+    flex: 1;
+    background: none;
+    color: var(--text-dim);
+    padding: 10px 8px;
+    border-radius: 8px;
+    font-size: 0.92rem;
+  }
+
+  .tab-btn.active{
+    background: var(--gold);
+    color: #201705;
+  }
+
+  .tab-btn:hover:not(.active){ color: var(--text); }
+
+  .tab-content{ display: none; }
+  .tab-content.active{ display: block; }
 </style>
 </head>
 <body>
+<main>
 
-<h1>Panel del ascensor</h1>
+  <h1>Vocabulario</h1>
+  <p class="sub hide-on-quiz">Guarda tus palabras nuevas y pon a prueba tu memoria. Todo se queda guardado en este archivo, en tu propio navegador.</p>
 
-<div class="panel">
-  <div class="grid" id="button-grid"></div>
-</div>
+  <div class="tabs hide-on-quiz">
+    <button type="button" class="tab-btn active" id="tab-btn-palabras" data-tab="palabras">Añadir palabra</button>
+    <button type="button" class="tab-btn" id="tab-btn-practicar" data-tab="practicar">Practicar</button>
+  </div>
 
-<div class="stats">
-  <div class="stats-title">Probabilidad por planta</div>
-  <div id="stats-list"></div>
-</div>
+  <div class="tab-content active" id="tab-palabras">
+    <div class="card">
+      <h2>Añadir palabra</h2>
+      <div class="row">
+        <input type="text" id="input-en" placeholder="Palabra en inglés">
+        <input type="text" id="input-es" placeholder="Traducción en español">
+      </div>
+      <button class="btn-add" id="btn-add" style="width:100%;">Guardar palabra</button>
+    </div>
 
-<div class="total-row">
-  <span class="total" id="total-count">0 registros</span>
-</div>
+    <div class="card">
+      <h2>Tu banco (<span id="word-count">0</span>)</h2>
+      <ul class="word-list" id="word-list"></ul>
+    </div>
+  </div>
 
-<div class="footer">
-  <button class="reset-btn" id="undo-btn" disabled>Deshacer último toque</button>
-  <button class="reset-btn" id="reset-btn">Reiniciar datos</button>
-</div>
+  <div class="tab-content" id="tab-practicar">
+    <div class="card">
+      <h2>Practicar</h2>
+      <div class="stats">
+        <span class="ok">Aciertos: <b id="stat-correct">0</b></span>
+        <span class="bad">Fallos: <b id="stat-wrong">0</b></span>
+        <span id="stat-total-wrap">de <b id="stat-total">0</b> preguntas</span>
+      </div>
 
-<div class="hint">Cada vez que llegues, pulsa la planta en la que ves el ascensor. Los datos se guardan en este dispositivo.</div>
+      <div id="setup-area">
+        <p class="setup-label">¿Cuántas preguntas quieres?</p>
+        <div class="qty-options" id="qty-options">
+          <button type="button" class="qty-pill" data-qty="5">5</button>
+          <button type="button" class="qty-pill" data-qty="10">10</button>
+          <button type="button" class="qty-pill" data-qty="15">15</button>
+          <button type="button" class="qty-pill" data-qty="all">Todas</button>
+        </div>
+        <div class="row">
+          <input type="text" inputmode="numeric" id="input-custom-qty" placeholder="O escribe un número">
+        </div>
+        <button class="btn-start" id="btn-start">Start</button>
+        <p class="empty" id="need-more" style="display:none;">Añade al menos 3 palabras para poder practicar.</p>
+      </div>
+
+      <div id="quiz-area" class="hidden">
+        <button class="btn-exit" id="btn-exit">← Salir de la práctica</button>
+        <p class="progress" id="quiz-progress"></p>
+        <p class="quiz-prompt" id="quiz-lang">¿Cómo se dice...?</p>
+        <div class="quiz-word" id="quiz-word"></div>
+        <div class="options" id="quiz-options"></div>
+        <div class="next-wrap" id="next-wrap">
+          <button class="btn-next" id="btn-next">Siguiente palabra →</button>
+        </div>
+      </div>
+
+      <div id="summary-area" class="hidden">
+        <div class="summary">
+          <p class="setup-label">Sesión terminada</p>
+          <div class="stats" style="justify-content:center;">
+            <span class="ok">Aciertos: <b id="summary-correct">0</b></span>
+            <span class="bad">Fallos: <b id="summary-wrong">0</b></span>
+          </div>
+          <p id="summary-detail">de 0 preguntas</p>
+          <button class="btn-add" id="btn-retry">Practicar otra vez</button>
+          <button class="btn-next" id="btn-finish">Salir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
 
 <script>
-(function () {
-  var FLOORS = [6, 5, 4, 3, 2, 1, 0, -1, -2, -3];
-  var STORAGE_KEY = "panel-ascensor:counts";
-  var counts = {};
-  FLOORS.forEach(function (f) { counts[f] = 0; });
+  const STORAGE_WORDS = 'vocabApp_words';
+  const STORAGE_STATS = 'vocabApp_stats';
 
-  function fmt(n) { return (n > 0 ? "P" : "") + n; }
-  function label(n) {
-    if (n === 0) return "Baja";
-    if (n < 0) return "Sótano " + Math.abs(n);
-    return "Planta " + n;
-  }
+  let words = JSON.parse(localStorage.getItem(STORAGE_WORDS) || '[]');
+  let stats = JSON.parse(localStorage.getItem(STORAGE_STATS) || '{"correct":0,"wrong":0,"total":0}');
+  let currentQuestion = null;
+  let sessionQueue = [];
+  let sessionPos = 0;
+  let sessionCorrect = 0;
+  let sessionWrong = 0;
+  let selectedQty = 10;
 
-  function render() {
-    var total = FLOORS.reduce(function (s, f) { return s + counts[f]; }, 0);
+  const inputEn = document.getElementById('input-en');
+  const inputEs = document.getElementById('input-es');
+  const btnAdd = document.getElementById('btn-add');
+  const wordListEl = document.getElementById('word-list');
+  const wordCountEl = document.getElementById('word-count');
+  const setupArea = document.getElementById('setup-area');
+  const qtyOptionsEl = document.getElementById('qty-options');
+  const inputCustomQty = document.getElementById('input-custom-qty');
+  const btnStart = document.getElementById('btn-start');
+  const needMoreEl = document.getElementById('need-more');
+  const quizArea = document.getElementById('quiz-area');
+  const quizProgressEl = document.getElementById('quiz-progress');
+  const quizLangEl = document.getElementById('quiz-lang');
+  const quizWordEl = document.getElementById('quiz-word');
+  const quizOptionsEl = document.getElementById('quiz-options');
+  const nextWrap = document.getElementById('next-wrap');
+  const btnNext = document.getElementById('btn-next');
+  const statCorrectEl = document.getElementById('stat-correct');
+  const statWrongEl = document.getElementById('stat-wrong');
+  const statTotalEl = document.getElementById('stat-total');
+  const statTotalWrapEl = document.getElementById('stat-total-wrap');
+  const summaryArea = document.getElementById('summary-area');
+  const summaryCorrectEl = document.getElementById('summary-correct');
+  const summaryWrongEl = document.getElementById('summary-wrong');
+  const summaryDetailEl = document.getElementById('summary-detail');
+  const btnRetry = document.getElementById('btn-retry');
+  const btnFinish = document.getElementById('btn-finish');
 
-    var statsList = document.getElementById("stats-list");
-    statsList.innerHTML = "";
-    FLOORS.forEach(function (f) {
-      var pct = total > 0 ? (counts[f] / total) * 100 : 0;
-      var row = document.createElement("div");
-      row.className = "row";
-      row.innerHTML =
-        '<span class="fnum">' + fmt(f) + '</span>' +
-        '<span class="bar-track"><span class="bar-fill" style="width:' + pct.toFixed(0) + '%"></span></span>' +
-        '<span class="count">' + counts[f] + '</span>' +
-        '<span class="pct">' + (total > 0 ? Math.round(pct) + "%" : "—") + '</span>';
-      statsList.appendChild(row);
-    });
+  function saveWords(){ localStorage.setItem(STORAGE_WORDS, JSON.stringify(words)); }
+  function saveStats(){ localStorage.setItem(STORAGE_STATS, JSON.stringify(stats)); }
 
-    document.getElementById("total-count").textContent =
-      total + (total === 1 ? " registro" : " registros");
-  }
+  function renderWordList(){
+    wordCountEl.textContent = words.length;
+    wordListEl.innerHTML = '';
 
-  function buildButtons() {
-    var grid = document.getElementById("button-grid");
-    FLOORS.forEach(function (f) {
-      var btn = document.createElement("button");
-      btn.className = "floor";
-      btn.textContent = fmt(f);
-      btn.setAttribute("aria-label", label(f));
-      btn.addEventListener("click", function () { press(f, btn); });
-      grid.appendChild(btn);
-    });
-  }
-
-  var lastPressed = null;
-
-  function press(f, btn) {
-    counts[f] = (counts[f] || 0) + 1;
-    lastPressed = f;
-    updateUndoButton();
-    render();
-    btn.classList.add("pressed");
-    setTimeout(function () { btn.classList.remove("pressed"); }, 160);
-    save();
-  }
-
-  function updateUndoButton() {
-    var undoBtn = document.getElementById("undo-btn");
-    undoBtn.disabled = (lastPressed === null);
-  }
-
-  function save() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(counts));
-    } catch (err) {
-      console.error("No se pudo guardar:", err);
-    }
-  }
-
-  function load() {
-    try {
-      var raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        var saved = JSON.parse(raw);
-        FLOORS.forEach(function (f) {
-          if (typeof saved[f] === "number") counts[f] = saved[f];
+    if(words.length === 0){
+      wordListEl.innerHTML = '<li class="empty">Todavía no has añadido ninguna palabra.</li>';
+    } else {
+      words.forEach((w, i) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="pair">${escapeHtml(w.en)} <span>— ${escapeHtml(w.es)}</span></span>`;
+        const del = document.createElement('button');
+        del.className = 'del-btn';
+        del.textContent = '✕';
+        del.title = 'Eliminar';
+        del.addEventListener('click', () => {
+          words.splice(i, 1);
+          saveWords();
+          renderWordList();
+          updateStartButton();
         });
-      }
-    } catch (err) {
-      // no hay datos guardados todavia, se queda en 0
+        li.appendChild(del);
+        wordListEl.appendChild(li);
+      });
     }
-    render();
+    updateStartButton();
   }
 
-  document.getElementById("undo-btn").addEventListener("click", function () {
-    if (lastPressed === null) return;
-    if (counts[lastPressed] > 0) counts[lastPressed]--;
-    lastPressed = null;
-    updateUndoButton();
-    render();
-    save();
+  function escapeHtml(str){
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  function updateStartButton(){
+    const enough = words.length >= 3;
+    btnStart.disabled = !enough;
+    needMoreEl.style.display = enough ? 'none' : 'block';
+  }
+
+  function renderStats(){
+    statCorrectEl.textContent = stats.correct;
+    statWrongEl.textContent = stats.wrong;
+    statTotalEl.textContent = stats.total;
+    statTotalWrapEl.style.display = stats.total > 0 ? 'inline' : 'none';
+  }
+
+  btnAdd.addEventListener('click', () => {
+    const en = inputEn.value.trim();
+    const es = inputEs.value.trim();
+    if(!en || !es) return;
+    words.push({ en, es });
+    saveWords();
+    inputEn.value = '';
+    inputEs.value = '';
+    inputEn.focus();
+    renderWordList();
   });
 
-  var resetPending = false;
-  var resetBtn = document.getElementById("reset-btn");
-  resetBtn.addEventListener("click", function () {
-    if (!resetPending) {
-      resetPending = true;
-      resetBtn.textContent = "¿Seguro? toca otra vez";
-      resetBtn.classList.add("confirm");
-      setTimeout(function () {
-        resetPending = false;
-        resetBtn.textContent = "Reiniciar datos";
-        resetBtn.classList.remove("confirm");
-      }, 3000);
-      return;
+  [inputEn, inputEs].forEach(inp => {
+    inp.addEventListener('keydown', e => {
+      if(e.key === 'Enter') btnAdd.click();
+    });
+  });
+
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.toggle('active', b === btn));
+      tabContents.forEach(c => c.classList.toggle('active', c.id === 'tab-' + btn.dataset.tab));
+    });
+  });
+
+  function selectQty(value){
+    selectedQty = value;
+    qtyOptionsEl.querySelectorAll('.qty-pill').forEach(p => {
+      p.classList.toggle('selected', p.dataset.qty === String(value));
+    });
+    inputCustomQty.value = '';
+  }
+
+  qtyOptionsEl.querySelectorAll('.qty-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const v = pill.dataset.qty === 'all' ? 'all' : parseInt(pill.dataset.qty, 10);
+      selectQty(v);
+    });
+  });
+
+  inputCustomQty.addEventListener('input', () => {
+    const n = parseInt(inputCustomQty.value, 10);
+    qtyOptionsEl.querySelectorAll('.qty-pill').forEach(p => p.classList.remove('selected'));
+    if(n > 0) selectedQty = n;
+  });
+
+  selectQty(10);
+
+  function shuffledIndexes(){
+    const idx = words.map((_, i) => i);
+    for(let i = idx.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [idx[i], idx[j]] = [idx[j], idx[i]];
     }
-    FLOORS.forEach(function (f) { counts[f] = 0; });
-    lastPressed = null;
-    updateUndoButton();
-    render();
-    save();
-    resetPending = false;
-    resetBtn.textContent = "Reiniciar datos";
-    resetBtn.classList.remove("confirm");
+    return idx;
+  }
+
+  function buildSessionQueue(){
+    let total;
+    const custom = parseInt(inputCustomQty.value, 10);
+    if(custom > 0){
+      total = custom;
+    } else if(selectedQty === 'all'){
+      total = words.length;
+    } else {
+      total = selectedQty;
+    }
+
+    const queue = [];
+    while(queue.length < total){
+      queue.push(...shuffledIndexes());
+    }
+    return queue.slice(0, total);
+  }
+
+  function pickRandom(arr, n, excludeIndex){
+    const pool = arr.map((_, i) => i).filter(i => i !== excludeIndex);
+    const chosen = [];
+    while(chosen.length < n && pool.length > 0){
+      const idx = Math.floor(Math.random() * pool.length);
+      chosen.push(pool[idx]);
+      pool.splice(idx, 1);
+    }
+    return chosen;
+  }
+
+  function newQuestion(){
+    const correctIndex = sessionQueue[sessionPos];
+    const direction = Math.random() < 0.5 ? 'en-es' : 'es-en';
+    const distractorIndexes = pickRandom(words, 2, correctIndex);
+    const optionIndexes = [correctIndex, ...distractorIndexes];
+    // shuffle options
+    for(let i = optionIndexes.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [optionIndexes[i], optionIndexes[j]] = [optionIndexes[j], optionIndexes[i]];
+    }
+
+    currentQuestion = { correctIndex, direction, optionIndexes };
+
+    quizProgressEl.textContent = `Pregunta ${sessionPos + 1} de ${sessionQueue.length}`;
+
+    const word = words[correctIndex];
+    if(direction === 'en-es'){
+      quizLangEl.textContent = '¿Cómo se dice esta palabra en español?';
+      quizWordEl.textContent = word.en;
+    } else {
+      quizLangEl.textContent = '¿Cómo se dice esta palabra en inglés?';
+      quizWordEl.textContent = word.es;
+    }
+
+    quizOptionsEl.innerHTML = '';
+    optionIndexes.forEach(idx => {
+      const opt = document.createElement('button');
+      opt.className = 'option';
+      opt.textContent = direction === 'en-es' ? words[idx].es : words[idx].en;
+      opt.addEventListener('click', () => handleAnswer(idx, opt));
+      quizOptionsEl.appendChild(opt);
+    });
+
+    nextWrap.style.display = 'none';
+  }
+
+  function handleAnswer(chosenIndex, btnEl){
+    const buttons = quizOptionsEl.querySelectorAll('.option');
+    buttons.forEach(b => b.disabled = true);
+
+    const correct = chosenIndex === currentQuestion.correctIndex;
+    if(correct){
+      stats.correct++;
+      sessionCorrect++;
+      btnEl.classList.add('correct');
+    } else {
+      stats.wrong++;
+      sessionWrong++;
+      btnEl.classList.add('wrong');
+      buttons.forEach(b => {
+        if(b.textContent === (currentQuestion.direction === 'en-es'
+            ? words[currentQuestion.correctIndex].es
+            : words[currentQuestion.correctIndex].en)){
+          b.classList.add('correct');
+        }
+      });
+    }
+    saveStats();
+    renderStats();
+
+    const isLast = sessionPos >= sessionQueue.length - 1;
+    btnNext.textContent = isLast ? 'Ver resultado →' : 'Siguiente palabra →';
+    nextWrap.style.display = 'block';
+  }
+
+  function startSession(){
+    sessionQueue = buildSessionQueue();
+    sessionPos = 0;
+    sessionCorrect = 0;
+    sessionWrong = 0;
+    stats = { correct: 0, wrong: 0, total: sessionQueue.length };
+    saveStats();
+    renderStats();
+
+    setupArea.classList.add('hidden');
+    summaryArea.classList.add('hidden');
+    quizArea.classList.remove('hidden');
+    document.body.classList.add('quiz-mode');
+    newQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showSummary(){
+    quizArea.classList.add('hidden');
+    summaryArea.classList.remove('hidden');
+    summaryCorrectEl.textContent = sessionCorrect;
+    summaryWrongEl.textContent = sessionWrong;
+    summaryDetailEl.textContent = `de ${sessionQueue.length} pregunta${sessionQueue.length === 1 ? '' : 's'}`;
+  }
+
+  const btnExit = document.getElementById('btn-exit');
+
+  btnStart.addEventListener('click', startSession);
+
+  btnExit.addEventListener('click', () => {
+    quizArea.classList.add('hidden');
+    summaryArea.classList.add('hidden');
+    setupArea.classList.remove('hidden');
+    document.body.classList.remove('quiz-mode');
   });
 
-  buildButtons();
-  load();
-})();
+  btnNext.addEventListener('click', () => {
+    sessionPos++;
+    if(sessionPos >= sessionQueue.length){
+      showSummary();
+    } else {
+      newQuestion();
+    }
+  });
+
+  btnRetry.addEventListener('click', startSession);
+
+  btnFinish.addEventListener('click', () => {
+    summaryArea.classList.add('hidden');
+    setupArea.classList.remove('hidden');
+    document.body.classList.remove('quiz-mode');
+  });
+
+  renderWordList();
+  renderStats();
 </script>
 
 </body>
