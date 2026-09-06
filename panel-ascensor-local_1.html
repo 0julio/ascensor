@@ -93,6 +93,26 @@
     border-color: var(--gold);
   }
 
+  textarea{
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 11px 13px;
+    color: var(--text);
+    font-family: 'Inter', monospace;
+    font-size: 0.85rem;
+    resize: vertical;
+    line-height: 1.4;
+  }
+
+  textarea::placeholder{ color: #656c7c; }
+
+  textarea:focus{
+    outline: none;
+    border-color: var(--gold);
+  }
+
   button{
     font-family: 'Inter', sans-serif;
     font-weight: 600;
@@ -377,13 +397,17 @@
 
   <div class="tab-content" id="tab-datos">
     <div class="card">
-      <h2>Importar / exportar</h2>
-      <p class="setup-label">Guarda una copia de tus palabras o carga una lista desde otro archivo.</p>
-      <div class="row">
-        <button class="btn-add" id="btn-export" style="flex:1;">Exportar palabras</button>
-        <button class="btn-add" id="btn-import" style="flex:1; background:var(--surface-2); color:var(--text);">Importar palabras</button>
-      </div>
-      <input type="file" id="input-import-file" accept=".json,application/json" style="display:none;">
+      <h2>Exportar</h2>
+      <p class="setup-label">Copia este texto para guardar una copia de tus palabras.</p>
+      <textarea id="export-json" rows="7" readonly></textarea>
+      <button class="btn-add" id="btn-copy-export" style="width:100%; margin-top:10px;">Copiar</button>
+    </div>
+
+    <div class="card">
+      <h2>Importar</h2>
+      <p class="setup-label">Pega aquí un JSON de palabras (por ejemplo, uno exportado antes) para añadirlas a tu banco.</p>
+      <textarea id="import-json" rows="7" placeholder='[{"en": "hello", "es": "hola"}]'></textarea>
+      <button class="btn-add" id="btn-import" style="width:100%; margin-top:10px; background:var(--surface-2); color:var(--text);">Importar</button>
     </div>
   </div>
 
@@ -479,6 +503,10 @@
   const summaryDetailEl = document.getElementById('summary-detail');
   const btnRetry = document.getElementById('btn-retry');
   const btnFinish = document.getElementById('btn-finish');
+  const exportJsonEl = document.getElementById('export-json');
+  const importJsonEl = document.getElementById('import-json');
+  const btnCopyExport = document.getElementById('btn-copy-export');
+  const btnImport = document.getElementById('btn-import');
 
   function saveWords(){ localStorage.setItem(STORAGE_WORDS, JSON.stringify(words)); }
   function saveStats(){ localStorage.setItem(STORAGE_STATS, JSON.stringify(stats)); }
@@ -508,6 +536,11 @@
       });
     }
     updateStartButton();
+    refreshExportJson();
+  }
+
+  function refreshExportJson(){
+    if(exportJsonEl) exportJsonEl.value = JSON.stringify(words, null, 2);
   }
 
   function escapeHtml(str){
@@ -557,54 +590,57 @@
     });
   });
 
-  const btnExport = document.getElementById('btn-export');
-  const btnImport = document.getElementById('btn-import');
-  const inputImportFile = document.getElementById('input-import-file');
 
-  btnExport.addEventListener('click', () => {
-    const data = JSON.stringify(words, null, 2);
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'vocabulario-palabras.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  btnCopyExport.addEventListener('click', () => {
+    exportJsonEl.select();
+    exportJsonEl.setSelectionRange(0, 999999);
+
+    const finish = (ok) => {
+      const original = btnCopyExport.textContent;
+      btnCopyExport.textContent = ok ? '¡Copiado!' : 'No se pudo copiar';
+      setTimeout(() => { btnCopyExport.textContent = original; }, 1500);
+    };
+
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(exportJsonEl.value).then(() => finish(true)).catch(() => finish(false));
+    } else {
+      try {
+        document.execCommand('copy');
+        finish(true);
+      } catch(err){
+        finish(false);
+      }
+    }
   });
 
-  btnImport.addEventListener('click', () => inputImportFile.click());
+  btnImport.addEventListener('click', () => {
+    const raw = importJsonEl.value.trim();
+    if(!raw){
+      alert('Pega primero el texto JSON que quieres importar.');
+      return;
+    }
 
-  inputImportFile.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if(!file) return;
+    try {
+      const parsed = JSON.parse(raw);
+      if(!Array.isArray(parsed)) throw new Error('formato inválido');
 
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      try {
-        const parsed = JSON.parse(ev.target.result);
-        if(!Array.isArray(parsed)) throw new Error('formato inválido');
+      let added = 0;
+      parsed.forEach(item => {
+        if(item && typeof item.en === 'string' && typeof item.es === 'string' && item.en.trim() && item.es.trim()){
+          words.push({ en: item.en.trim(), es: item.es.trim() });
+          added++;
+        }
+      });
 
-        let added = 0;
-        parsed.forEach(item => {
-          if(item && typeof item.en === 'string' && typeof item.es === 'string' && item.en.trim() && item.es.trim()){
-            words.push({ en: item.en.trim(), es: item.es.trim() });
-            added++;
-          }
-        });
-
-        saveWords();
-        renderWordList();
-        alert(added > 0
-          ? `Se importaron ${added} palabra${added === 1 ? '' : 's'}.`
-          : 'El archivo no tenía palabras válidas.');
-      } catch(err){
-        alert('No se pudo leer el archivo. Asegúrate de que sea un JSON exportado desde esta app.');
-      }
-      inputImportFile.value = '';
-    };
-    reader.readAsText(file);
+      saveWords();
+      renderWordList();
+      importJsonEl.value = '';
+      alert(added > 0
+        ? `Se importaron ${added} palabra${added === 1 ? '' : 's'}.`
+        : 'El texto no tenía palabras válidas.');
+    } catch(err){
+      alert('No se pudo leer ese texto. Asegúrate de que sea un JSON válido con el formato [{"en": "...", "es": "..."}].');
+    }
   });
 
   function selectQty(value){
